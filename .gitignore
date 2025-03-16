@@ -6,7 +6,7 @@ client/.env.local
 client/.env.development
 client/.env.production
 server/.env
-
+asset-download
 client/.next/
 
 .DS_Store
