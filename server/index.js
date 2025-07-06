@@ -10,6 +10,3 @@ app.listen(PORT,()=>{
     console.log(`Server started at ${PORT}`)
 })
 
-app.use('/',(req,res)=>{
-    res.send("Hello")
-})
