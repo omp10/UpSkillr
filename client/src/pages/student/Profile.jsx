@@ -25,6 +25,7 @@ const Profile = () => {
   const [profilePhoto, setProfilePhoto] = useState("");
 
   const { data, isLoading, refetch } = useLoadUserQuery();
+  console.log(data);
   const [
     updateUser,
     {

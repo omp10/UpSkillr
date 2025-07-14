@@ -1,6 +1,8 @@
 import {User} from "../models/user.model.js"
 import { generateToken } from "../utils/generateToken.js";
 import bcrypt from "bcryptjs"
+import { Course } from "../models/course.model.js"; 
+import { deleteMediaFromCloudinary, uploadMedia } from "../utils/cloudinary.js";
 export const register = async (req,res) => {
     try {
        
@@ -108,3 +110,65 @@ export const getUserProfile = async (req,res) => {
         })
     }
 }
+
+export const updateProfile = async (req, res) => {
+  try {
+    const userId = req.id;
+
+    // Validate body
+    const { name } = req.body || {};
+    const profilePhoto = req.file;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
+      });
+    }
+
+    let photoUrl = user.photoUrl;
+
+    // Handle image upload if file is provided
+    if (profilePhoto) {
+      try {
+        // Delete old image
+        if (user.photoUrl) {
+          const publicId = user.photoUrl.split("/").pop().split(".")[0];
+          await deleteMediaFromCloudinary(publicId);
+        }
+
+        // Upload new photo
+        const cloudResponse = await uploadMedia(profilePhoto.path);
+        photoUrl = cloudResponse.secure_url;
+      } catch (uploadError) {
+        console.log("Error uploading image:", uploadError);
+        return res.status(500).json({
+          success: false,
+          message: "Error uploading image",
+        });
+      }
+    }
+
+    const updatedData = {
+      ...(name && { name }),
+      photoUrl,
+    };
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
+      new: true,
+    }).select("-password");
+
+    return res.status(200).json({
+      success: true,
+      user: updatedUser,
+      message: "Profile updated successfully.",
+    });
+  } catch (error) {
+    console.log("Update profile error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update profile",
+    });
+  }
+};
