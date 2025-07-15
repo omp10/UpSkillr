@@ -21,7 +21,7 @@ function App() {
           path: "/",
           element: (
             <>
-              <HeroSection />,
+              <HeroSection />
               {/* <Courses/> */}
               
             </>
