@@ -8,9 +8,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./dropdown-menu";
-import { Button } from "./button";
-import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import DarkMode from "@/DarkMode";
 import {
   Sheet,
@@ -20,8 +20,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "./sheet";
-import { Separator } from "@radix-ui/react-dropdown-menu";
+} from "../ui/sheet";
+import { Separator } from "../ui/separator"; // ✅ fixed import
 import { Link, useNavigate } from "react-router-dom";
 import { useLogoutUserMutation } from "@/features/api/authApi";
 import { toast } from "sonner";
@@ -41,7 +41,7 @@ const Navbar = () => {
       toast.success(data?.message || "User log out.");
       navigate("/login");
     }
-  }, [isSuccess]);
+  }, [isSuccess, data, navigate]); // ✅ added data & navigate for safety
 
   return (
     <div className="h-16 dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-10">
@@ -55,20 +55,19 @@ const Navbar = () => {
             </h1>
           </Link>
         </div>
-
         {/* User icons and dark mode icon  */}
         <div className="flex items-center gap-8">
           {user ? (
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Avatar>
-                  <AvatarImage
-                    src={user?.photoUrl || "https://github.com/shadcn.png"}
-                    alt="@shadcn"
-                  />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-              </DropdownMenuTrigger>
+             <DropdownMenuTrigger asChild>
+  <button type="button" className="rounded-full focus:outline-none">
+    <Avatar>
+      <AvatarImage src={user?.photoUrl || "https://github.com/shadcn.png"} />
+      <AvatarFallback>CN</AvatarFallback>
+    </Avatar>
+  </button>
+</DropdownMenuTrigger>
+
               <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -104,8 +103,7 @@ const Navbar = () => {
           <DarkMode />
         </div>
       </div>
-
-      {/* Mobile device */}
+      {/* Mobile device  */}
       <div className="flex md:hidden items-center justify-between px-4 h-full">
         <h1 className="font-extrabold text-2xl">E-learning</h1>
         <MobileNavbar user={user} logoutHandler={logoutHandler} />
@@ -137,26 +135,33 @@ const MobileNavbar = ({ user, logoutHandler }) => {
           </SheetTitle>
           <DarkMode />
         </SheetHeader>
-        <Separator className="mr-2 my-2" />
-        <nav className="flex flex-col space-y-4 p-4">
-          <SheetClose asChild>
-            <Link to="/my-learning">My Learning</Link>
-          </SheetClose>
-          <SheetClose asChild>
-            <Link to="/profile">Edit Profile</Link>
-          </SheetClose>
-          <button 
-            onClick={() => logoutHandler()}
-            className="text-left text-red-500 cursor-pointer"
-          >
-            Log out
-          </button>
+        <Separator className="my-2" />
+        <nav className="flex flex-col space-y-4">
+          {user ? (
+            <>
+              <Link to="/my-learning">My Learning</Link>
+              <Link to="/profile">Edit Profile</Link>
+              <p
+                onClick={logoutHandler}
+                className="cursor-pointer text-red-500"
+              >
+                Log out
+              </p>
+            </>
+          ) : (
+            <>
+              <Button variant="outline" onClick={() => navigate("/login")}>
+                Login
+              </Button>
+              <Button onClick={() => navigate("/login")}>Signup</Button>
+            </>
+          )}
         </nav>
         {user?.role === "instructor" && (
           <SheetFooter>
             <SheetClose asChild>
               <Button
-                type="button"
+                type="submit"
                 onClick={() => navigate("/admin/dashboard")}
               >
                 Dashboard
