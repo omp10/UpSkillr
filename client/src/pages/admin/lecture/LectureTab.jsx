@@ -92,13 +92,14 @@ const LectureTab = () => {
   }
 
   useEffect(() => {
-    if (isSuccess) {
-      toast.success(data.message);
-    }
-    if (error) {
-      toast.error(error.data.message);
-    }
-  }, [isSuccess, error]);
+  if (isSuccess && data?.message) {
+    toast.success(data.message);
+  }
+  if (error?.data?.message) {
+    toast.error(error.data.message);
+  }
+}, [isSuccess, data, error]);
+
 
   useEffect(()=>{
     if(removeSuccess){

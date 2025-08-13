@@ -51,7 +51,7 @@ const Navbar = () => {
           <School size={"30"} />
           <Link to="/">
             <h1 className="hidden md:block font-extrabold text-2xl">
-              E-Learning
+              UpSkillr
             </h1>
           </Link>
         </div>
@@ -59,14 +59,16 @@ const Navbar = () => {
         <div className="flex items-center gap-8">
           {user ? (
             <DropdownMenu>
-             <DropdownMenuTrigger asChild>
+              <DropdownMenuTrigger asChild>
   <button type="button" className="rounded-full focus:outline-none">
-    <Avatar>
-      <AvatarImage src={user?.photoUrl || "https://github.com/shadcn.png"} />
-      <AvatarFallback>CN</AvatarFallback>
-    </Avatar>
-  </button>
-</DropdownMenuTrigger>
+                  <Avatar>
+                    <AvatarImage
+                      src={user?.photoUrl || "https://github.com/shadcn.png"}
+                    />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </button>
+              </DropdownMenuTrigger>
 
               <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -105,7 +107,7 @@ const Navbar = () => {
       </div>
       {/* Mobile device  */}
       <div className="flex md:hidden items-center justify-between px-4 h-full">
-        <h1 className="font-extrabold text-2xl">E-learning</h1>
+        <h1 className="font-extrabold text-2xl">UpSkillr</h1>
         <MobileNavbar user={user} logoutHandler={logoutHandler} />
       </div>
     </div>
@@ -131,7 +133,7 @@ const MobileNavbar = ({ user, logoutHandler }) => {
       <SheetContent className="flex flex-col">
         <SheetHeader className="flex flex-row items-center justify-between mt-2">
           <SheetTitle>
-            <Link to="/">E-Learning</Link>
+            <Link to="/">UpSkillr</Link>
           </SheetTitle>
           <DarkMode />
         </SheetHeader>
