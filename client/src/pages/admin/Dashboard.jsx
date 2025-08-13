@@ -1,29 +1,28 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import { useGetPurchasedCoursesQuery } from "@/features/api/purchaseApi";
+import { useGetPurchasedCoursesQuery } from "@/features/api/purchaseApi";
 import React from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 const Dashboard = () => {
 
-  // const {data, isSuccess, isError, isLoading} = useGetPurchasedCoursesQuery();
-  const isLoading = false;
-  if(isLoading) return <h1>Loading...</h1>
-  const data=[]
-  // if(isError) return <h1 className="text-red-500">Failed to get purchased course</h1>
+  const {data, isSuccess, isError, isLoading} = useGetPurchasedCoursesQuery();
 
-  //
+  if(isLoading) return <h1>Loading...</h1>
+  if(isError) return <h1 className="text-red-500">Failed to get purchased course</h1>
+
+  
   const {purchasedCourse} = data || [];
 
   const courseData = purchasedCourse?.map((course)=> ({
-    name:course.courseId.courseTitle,
-    price:course.courseId.coursePrice
+    name:course?.courseId?.courseTitle || "Unknown Course",
+    price:course?.courseId?.coursePrice || 0
   }))
 
-  const totalRevenue = purchasedCourse?.reduce((acc,element) => acc+(element.amount || 0), 0);
+  const totalRevenue = purchasedCourse.reduce((acc,element) => acc+(element.amount || 0), 0);
 
-  const totalSales = purchasedCourse?.length;
+  const totalSales = purchasedCourse.length;
   return (
-    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
+    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
       <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
         <CardHeader>
           <CardTitle>Total Sales</CardTitle>
