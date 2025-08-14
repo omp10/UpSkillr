@@ -3,29 +3,20 @@ import { Button } from "./ui/button";
 import { useCreateCheckoutSessionMutation } from "@/features/api/purchaseApi";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
 
 const BuyCourseButton = ({ courseId }) => {
-  const navigate = useNavigate();
+  const [createCheckoutSession, { data, isLoading, isSuccess, isError, error }] =
+    useCreateCheckoutSessionMutation();
 
-  const [
-    createCheckoutSession,
-    { data, isLoading, isSuccess, isError, error },
-  ] = useCreateCheckoutSessionMutation();
-
-  // Handle the button click to start purchase
+  // Handle purchase click
   const purchaseCourseHandler = async () => {
-    try {
-      await createCheckoutSession({ courseId }); // Pass courseId to backend
-    } catch (err) {
-      toast.error("Failed to initiate purchase");
-    }
+    await createCheckoutSession({ courseId }); // send courseId as object
   };
 
   useEffect(() => {
     if (isSuccess) {
       if (data?.url) {
-        // ✅ Redirect user to Stripe checkout
+        // ✅ Redirect to Stripe checkout
         window.location.href = data.url;
       } else {
         toast.error("Invalid response from server.");
