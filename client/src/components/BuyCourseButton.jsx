@@ -3,27 +3,39 @@ import { Button } from "./ui/button";
 import { useCreateCheckoutSessionMutation } from "@/features/api/purchaseApi";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const BuyCourseButton = ({ courseId }) => {
-  const [createCheckoutSession, {data, isLoading, isSuccess, isError, error }] =
-    useCreateCheckoutSessionMutation();
+  const navigate = useNavigate();
 
+  const [
+    createCheckoutSession,
+    { data, isLoading, isSuccess, isError, error },
+  ] = useCreateCheckoutSessionMutation();
+
+  // Handle the button click to start purchase
   const purchaseCourseHandler = async () => {
-    await createCheckoutSession(courseId);
+    try {
+      await createCheckoutSession({ courseId }); // Pass courseId to backend
+    } catch (err) {
+      toast.error("Failed to initiate purchase");
+    }
   };
 
-  useEffect(()=>{
-    if(isSuccess){
-       if(data?.url){
-        window.location.href = data.url; // Redirect to stripe checkout url
-       }else{
-        toast.error("Invalid response from server.")
-       }
-    } 
-    if(isError){
-      toast.error(error?.data?.message || "Failed to create checkout session")
+  useEffect(() => {
+    if (isSuccess) {
+      if (data?.url) {
+        // ✅ Redirect user to Stripe checkout
+        window.location.href = data.url;
+      } else {
+        toast.error("Invalid response from server.");
+      }
     }
-  },[data, isSuccess, isError, error])
+
+    if (isError) {
+      toast.error(error?.data?.message || "Failed to create checkout session");
+    }
+  }, [data, isSuccess, isError, error]);
 
   return (
     <Button
