@@ -118,3 +118,45 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes custom-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes custom-spin-reverse {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+/* You can also add the pulse-slow keyframe here if it's not already in your Tailwind config */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.custom-spin {
+  animation: custom-spin 1s linear infinite;
+}
+
+.custom-spin-reverse {
+  animation: custom-spin-reverse 1.5s linear infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ... other global CSS styles ... */
