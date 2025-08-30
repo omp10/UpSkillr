@@ -1,7 +1,30 @@
+"use client";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 import Course from "./Course";
 import { useGetPublishedCourseQuery } from "@/features/api/courseApi";
+import { motion } from "framer-motion";
+
+// --- Animation Variants ---
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15, // delay each card
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
 
 const Courses = () => {
   const { data, isLoading, isError } = useGetPublishedCourseQuery();
@@ -30,21 +53,32 @@ const Courses = () => {
           Explore Our Courses
         </h2>
         <p className="text-center text-lg text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
-          From beginner to advanced, find the perfect course to start or advance your career.
+          From beginner to advanced, find the perfect course to start or advance
+          your career.
         </p>
 
         {isLoading ? (
+          // Skeletons stay as is
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {Array.from({ length: 8 }).map((_, index) => (
               <CourseSkeleton key={index} />
             ))}
           </div>
         ) : courses.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          // Animate grid items like projects
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible" // 👈 animate only when scrolled into view
+            viewport={{ once: true, amount: 0.2 }} // once=true = animate only once
+          >
             {courses.map((course) => (
-              <Course key={course._id} course={course} />
+              <motion.div key={course._id} variants={cardVariants}>
+                <Course course={course} />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         ) : (
           <div className="text-center py-20">
             <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">
@@ -62,6 +96,7 @@ const Courses = () => {
 
 export default Courses;
 
+// Skeleton stays same
 const CourseSkeleton = () => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden animate-pulse">
