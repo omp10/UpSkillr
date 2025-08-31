@@ -24,4 +24,4 @@ const EditLecture = () => {
   );
 };
 
-export default EditLecture; 
+export default EditLecture;

@@ -18,8 +18,8 @@ createRoot(document.getElementById("root")).render(
     <Provider store={appStore}>
       <Custom>
         <App />
+        <Toaster />
       </Custom>
-      <Toaster />
     </Provider>
   </StrictMode>
 );

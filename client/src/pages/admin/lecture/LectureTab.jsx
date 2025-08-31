@@ -17,8 +17,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-// const MEDIA_API = "http://localhost:8080/api/v1/media";
-const MEDIA_API = `${import.meta.env.VITE_API_URL}/media`;
+const MEDIA_API = "http://localhost:8080/api/v1/media";
 
 const LectureTab = () => {
   const [lectureTitle, setLectureTitle] = useState("");
@@ -93,14 +92,13 @@ const LectureTab = () => {
   }
 
   useEffect(() => {
-  if (isSuccess && data?.message) {
-    toast.success(data.message);
-  }
-  if (error?.data?.message) {
-    toast.error(error.data.message);
-  }
-}, [isSuccess, data, error]);
-
+    if (isSuccess) {
+      toast.success(data.message);
+    }
+    if (error) {
+      toast.error(error.data.message);
+    }
+  }, [isSuccess, error]);
 
   useEffect(()=>{
     if(removeSuccess){
@@ -144,7 +142,7 @@ const LectureTab = () => {
           </Label>
           <Input
             type="file"
-            accept="video/*"  
+            accept="video/*"
             onChange={fileChangeHandler}
             placeholder="Ex. Introduction to Javascript"
             className="w-fit"
@@ -172,7 +170,7 @@ const LectureTab = () => {
               }
             
           </Button>
-        </div> 
+        </div>
       </CardContent>
     </Card>
   );

@@ -45,7 +45,7 @@ const CourseTab = () => {
   const { data: courseByIdData, isLoading: courseByIdLoading , refetch} =
     useGetCourseByIdQuery(courseId);
 
-    const [publishCourse] = usePublishCourseMutation();
+    const [publishCourse, {}] = usePublishCourseMutation();
  
   useEffect(() => {
     if (courseByIdData?.course) { 

@@ -10,4 +10,4 @@ const RichTextEditor = ({input, setInput}) => {
    
   return <ReactQuill theme="snow" value={input.description} onChange={handleChange} />;
 }
-export default RichTextEditor;
+export default RichTextEditor

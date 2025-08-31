@@ -8,9 +8,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+} from "./ui/dropdown-menu";
+import { Button } from "./ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import DarkMode from "@/DarkMode";
 import {
   Sheet,
@@ -20,8 +20,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "../ui/sheet";
-import { Separator } from "../ui/separator"; // ✅ fixed import
+} from "./ui/sheet";
+import { Separator } from "@radix-ui/react-dropdown-menu";
 import { Link, useNavigate } from "react-router-dom";
 import { useLogoutUserMutation } from "@/features/api/authApi";
 import { toast } from "sonner";
@@ -31,7 +31,6 @@ const Navbar = () => {
   const { user } = useSelector((store) => store.auth);
   const [logoutUser, { data, isSuccess }] = useLogoutUserMutation();
   const navigate = useNavigate();
-
   const logoutHandler = async () => {
     await logoutUser();
   };
@@ -41,7 +40,7 @@ const Navbar = () => {
       toast.success(data?.message || "User log out.");
       navigate("/login");
     }
-  }, [isSuccess, data, navigate]); // ✅ added data & navigate for safety
+  }, [isSuccess]);
 
   return (
     <div className="h-16 dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-10">
@@ -51,7 +50,7 @@ const Navbar = () => {
           <School size={"30"} />
           <Link to="/">
             <h1 className="hidden md:block font-extrabold text-2xl">
-              UpSkillr
+             UpSkillr 
             </h1>
           </Link>
         </div>
@@ -60,16 +59,14 @@ const Navbar = () => {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-  <button type="button" className="rounded-full focus:outline-none">
-                  <Avatar>
-                    <AvatarImage
-                      src={user?.photoUrl || "https://github.com/shadcn.png"}
-                    />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </button>
+                <Avatar>
+                  <AvatarImage
+                    src={user?.photoUrl || "https://github.com/shadcn.png"}
+                    alt="@shadcn"
+                  />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
               </DropdownMenuTrigger>
-
               <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -78,7 +75,8 @@ const Navbar = () => {
                     <Link to="my-learning">My learning</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link to="profile">Edit Profile</Link>
+                    {" "}
+                    <Link to="profile">Edit Profile</Link>{" "}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={logoutHandler}>
                     Log out
@@ -87,9 +85,7 @@ const Navbar = () => {
                 {user?.role === "instructor" && (
                   <>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      <Link to="/admin/dashboard">Dashboard</Link>
-                    </DropdownMenuItem>
+                    <DropdownMenuItem><Link to="/admin/dashboard">Dashboard</Link></DropdownMenuItem>
                   </>
                 )}
               </DropdownMenuContent>
@@ -107,8 +103,8 @@ const Navbar = () => {
       </div>
       {/* Mobile device  */}
       <div className="flex md:hidden items-center justify-between px-4 h-full">
-        <h1 className="font-extrabold text-2xl">UpSkillr</h1>
-        <MobileNavbar user={user} logoutHandler={logoutHandler} />
+        <h1 className="font-extrabold text-2xl">E-learning</h1>
+        <MobileNavbar user={user}/>
       </div>
     </div>
   );
@@ -116,9 +112,9 @@ const Navbar = () => {
 
 export default Navbar;
 
-const MobileNavbar = ({ user, logoutHandler }) => {
+const MobileNavbar = ({user}) => {
   const navigate = useNavigate();
-
+  
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -132,42 +128,19 @@ const MobileNavbar = ({ user, logoutHandler }) => {
       </SheetTrigger>
       <SheetContent className="flex flex-col">
         <SheetHeader className="flex flex-row items-center justify-between mt-2">
-          <SheetTitle>
-            <Link to="/">UpSkillr</Link>
-          </SheetTitle>
+          <SheetTitle> <Link to="/">E-Learning</Link></SheetTitle>
           <DarkMode />
         </SheetHeader>
-        <Separator className="my-2" />
+        <Separator className="mr-2" />
         <nav className="flex flex-col space-y-4">
-          {user ? (
-            <>
-              <Link to="/my-learning">My Learning</Link>
-              <Link to="/profile">Edit Profile</Link>
-              <p
-                onClick={logoutHandler}
-                className="cursor-pointer text-red-500"
-              >
-                Log out
-              </p>
-            </>
-          ) : (
-            <>
-              <Button variant="outline" onClick={() => navigate("/login")}>
-                Login
-              </Button>
-              <Button onClick={() => navigate("/login")}>Signup</Button>
-            </>
-          )}
+          <Link to="/my-learning">My Learning</Link>
+          <Link to="/profile">Edit Profile</Link>
+          <p>Log out</p>
         </nav>
         {user?.role === "instructor" && (
           <SheetFooter>
             <SheetClose asChild>
-              <Button
-                type="submit"
-                onClick={() => navigate("/admin/dashboard")}
-              >
-                Dashboard
-              </Button>
+              <Button type="submit" onClick={()=> navigate("/admin/dashboard")}>Dashboard</Button>
             </SheetClose>
           </SheetFooter>
         )}

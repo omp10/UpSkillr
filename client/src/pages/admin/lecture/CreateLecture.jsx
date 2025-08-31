@@ -90,7 +90,7 @@ const CreateLecture = () => {
           ) : lectureData.lectures.length === 0 ? (
             <p>No lectures availabe</p>
           ) : (
-            lectureData?.lectures?.map((lecture, index) => (
+            lectureData.lectures.map((lecture, index) => (
               <Lecture
                 key={lecture._id}
                 lecture={lecture}

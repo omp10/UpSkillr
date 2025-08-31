@@ -67,9 +67,9 @@ const CourseTable = () => {
   if(isLoading) return <h1>Loading...</h1>
  
   return (
-    <div className="mt-10">
+    <div>
       <Button onClick={() => navigate(`create`)}>Create a new course</Button>
-      <Table className="mt-5">
+      <Table>
         <TableCaption>A list of your recent courses.</TableCaption>
         <TableHeader>
           <TableRow>
@@ -80,7 +80,7 @@ const CourseTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.courses.map((course) => (
+          {data.courses.map((course) => (
             <TableRow key={course._id}>
               <TableCell className="font-medium">{course?.coursePrice || "NA"}</TableCell>
               <TableCell> <Badge>{course.isPublished ? "Published" : "Draft"}</Badge> </TableCell>
