@@ -27,7 +27,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://upskillr-se6s.onrender.com","https://up-skillr-henna.vercel.app/"],
+    origin: ["http://localhost:5173", "https://upskillr-se6s.onrender.com","https://up-skillr-henna.vercel.app"],
     credentials: true,
   })
 );
