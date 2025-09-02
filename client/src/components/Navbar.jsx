@@ -103,7 +103,7 @@ const Navbar = () => {
       </div>
       {/* Mobile device  */}
       <div className="flex md:hidden items-center justify-between px-4 h-full">
-        <h1 className="font-extrabold text-2xl">E-learning</h1>
+        <h1 className="font-extrabold text-2xl">Upskillr</h1>
         <MobileNavbar user={user}/>
       </div>
     </div>
