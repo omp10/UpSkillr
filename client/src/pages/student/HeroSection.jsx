@@ -73,7 +73,7 @@ const HeroSection = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search thousands of courses..."
+            placeholder="Search the best courses"
             className="flex-grow border-none focus-visible:ring-0 px-6 py-4 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 bg-transparent"
           />
           <motion.button

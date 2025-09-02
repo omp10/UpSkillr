@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 
 const Course = ({ course }) => {
   // Simple guard clause to handle missing data
@@ -53,26 +52,13 @@ const Course = ({ course }) => {
                   {course.creator?.name || "Anonymous"}
                 </h1>
               </div>
-              <Badge className={"bg-blue-600 text-white px-2 py-1 text-xs rounded-full"}>
+              <Badge className="bg-blue-600 text-white px-2 py-1 text-xs rounded-full">
                 {course.courseLevel}
               </Badge>
             </div>
-            {/* Added Buy button next to the price */}
+            {/* Only price remains, button removed */}
             <div className="flex justify-between items-center text-lg font-bold mt-4">
               <span>₹{course.coursePrice}</span>
-              <Button
-                variant="ghost"
-                className="bg-blue-600 text-white hover:bg-blue-700 dark:hover:bg-blue-700 rounded-full"
-                onClick={(e) => {
-                  // This is important to prevent the Link navigation.
-                  e.stopPropagation();
-                  e.preventDefault();
-                  // Add logic here to handle the "Buy" action, e.g., show a modal
-                  console.log("Buy button clicked for course:", course.courseTitle);
-                }}
-              >
-                Buy Now
-              </Button>
             </div>
           </CardContent>
         </Card>
