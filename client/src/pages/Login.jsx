@@ -12,6 +12,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   useLoginUserMutation,
   useRegisterUserMutation,
 } from "@/features/api/authApi";
@@ -25,6 +32,7 @@ const Login = () => {
     name: "",
     email: "",
     password: "",
+    role: "student",
   });
   const [loginInput, setLoginInput] = useState({ email: "", password: "" });
 
@@ -58,32 +66,53 @@ const Login = () => {
   };
 
   const handleRegistration = async (type) => {
-    const inputData = type === "signup" ? signupInput : loginInput;
-    const action = type === "signup" ? registerUser : loginUser;
-    await action(inputData);
+    if (type === "signup") {
+      // Ensure role is always included
+      const signupData = {
+        ...signupInput,
+        role: signupInput.role || "student"
+      };
+      await registerUser(signupData);
+    } else {
+      await loginUser(loginInput);
+    }
   };
 
   useEffect(() => {
     if(registerIsSuccess && registerData){
-      toast.success(registerData.message || "Signup successful.")
+      toast.success(registerData.message || "Signup successful.");
+      // Redirect based on role
+      if(registerData.user?.role === "instructor"){
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/");
+      }
     }
     if(registerError){
-      toast.error(registerError.data.message || "Signup Failed");
+      toast.error(registerError.data?.message || "Signup Failed");
     }
     if(loginIsSuccess && loginData){
       toast.success(loginData.message || "Login successful.");
-      navigate("/");
+      // Redirect based on role
+      if(loginData.user?.role === "instructor"){
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/");
+      }
     }
     if(loginError){ 
-      toast.error(loginError.data.message || "login Failed");
+      toast.error(loginError.data?.message || "login Failed");
     }
   }, [
     loginIsLoading,
     registerIsLoading,
+    loginIsSuccess,
+    registerIsSuccess,
     loginData,
     registerData,
     loginError,
     registerError,
+    navigate,
   ]);
 
   return (
@@ -125,7 +154,7 @@ const Login = () => {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="username">Password</Label>
+                <Label htmlFor="password">Password</Label>
                 <Input
                   type="password"
                   name="password"
@@ -134,6 +163,23 @@ const Login = () => {
                   placeholder="Eg. xyz"
                   required="true"
                 />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="role">I am a</Label>
+                <Select
+                  value={signupInput.role}
+                  onValueChange={(value) =>
+                    setSignupInput({ ...signupInput, role: value })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select your role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="student">Student</SelectItem>
+                    <SelectItem value="instructor">Creator/Instructor</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </CardContent>
             <CardFooter>

@@ -37,10 +37,10 @@ const Navbar = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      toast.success(data?.message || "User log out.");
+      toast.success(data?.message || "User logged out successfully.");
       navigate("/login");
     }
-  }, [isSuccess]);
+  }, [isSuccess, data, navigate]);
 
   return (
     <div className="h-16 dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-10">

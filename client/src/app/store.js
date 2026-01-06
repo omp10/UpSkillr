@@ -11,6 +11,7 @@ export const appStore = configureStore({
 });
 
 const initializeApp = async () => {
-    await appStore.dispatch(authApi.endpoints.loadUser.initiate({},{forceRefetch:true}))
+    // Force refetch and don't use cache
+    await appStore.dispatch(authApi.endpoints.loadUser.initiate(undefined, {forceRefetch: true}))
 }
 initializeApp();
